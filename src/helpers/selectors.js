@@ -42,25 +42,17 @@ export function getInterview(state, interview) {
 
 
 
-// export function getInterviewersForDay(state, day) {
-//     const filteredAppointment = state.days.find(obj => obj.interviewers === day);
-//     if (filteredAppointment) {
-//         return filteredAppointment.appointments.map(appointmentId => state.appointments[appointmentId]);
-//     } else {
-//         return [];
-//     }
-// };
-
 export function getInterviewersForDay(state, day) {
-    const filteredDay = state.days.find(obj => obj.name === day);
+    const filteredDay = state.days.find((obj) => obj.name === day);
+
     if (filteredDay) {
-        return filteredDay.appointments
-            .map(appointmentId => {
-                const appointment = state.appointments[appointmentId];
-                return appointment.interview ? state.interviewers[appointment.interview.interviewer] : null;
-            })
-            .filter(interviewer => interviewer !== null);
+        const appointmentIds = filteredDay.appointments;
+        const appointments = appointmentIds.map((appointmentId) => state.appointments[appointmentId]);
+        return appointments;
     } else {
         return [];
     }
 }
+
+
+
