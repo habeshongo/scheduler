@@ -17,6 +17,7 @@ const Appointment = (props) => {
     const EMPTY = "EMPTY";
     const SHOW = "SHOW";
     const CREATE = "CREATE";
+    const SAVING = "SAVING";
 
     console.log(props);
 
@@ -36,68 +37,71 @@ const Appointment = (props) => {
 
         /*--------*/
         // Make the PUT request to update the database
-        Axios
-            .put(`/api/appointments/:${id}`)
-            .then(response => response.json()).then((data) => {
-                setState(prevState => ({
-                    ...prevState,
-                    appointments: {
-                        ...data
-                    }
-                }));
+        return Axios
+            .put(`http://localhost:8001/api/appointments/${id}`)
+            .then(() => {
+                if (!state.appointments[id].interview) {
+                    setState({
+                        ...state,
+                        appointments,
+                    })
+                } else {
+                    setState({
+                        ...state,
+                        appointments
+                    })
+                }
             })
-            .catch(error => {
-                // Handle any errors that occur during the request
-                console.error('Error updating appointment:', error);
-            });
     }
-    /*--------*/
 
-    setState({
-        ...state,
-        appointments
-    });
+
+    function save(name, interviewer) {
+        const interview = {
+            student: name,
+            interviewer
+        };
+        transition(SAVING);
+        bookInterview(id, interview)
+            .then(() => transition(SHOW))
+            .catch((err) => console.log(err))
+
+
+    }
+
+
+
+
+
+    return (
+        <>
+            <article className="appointment">
+                <Header time={time} />
+                {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
+                {mode === SHOW && (
+                    <Show
+                        student={interview.student}
+                        interviewer={[]}
+                    />
+                )}
+
+                {mode === CREATE && (
+                    <Form
+                        onSave={save}
+                        bookInterview={bookInterview}
+
+
+                    />
+                )}
+
+            </article>
+
+        </>
+
+    )
 
 }
 
-function save(name, interviewer) {
-    const interview = {
-        student: name,
-        interviewer
-    };
 
-    bookInterview(id, interview);
-    transition(SHOW);
-
-}
-
-return (
-    <>
-        <article className="appointment">
-            <Header time={time} />
-            {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-            {mode === SHOW && (
-                <Show
-                    student={interview.student}
-                    interviewer={[]}
-                />
-            )}
-
-            {mode === CREATE && (
-                <Form
-                    onSave={save}
-                    bookInterview={bookInterview}
-
-
-                />
-            )}
-
-        </article>
-
-    </>
-
-)
-}
 
 
 export default Appointment;
