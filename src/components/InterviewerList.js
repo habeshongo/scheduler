@@ -7,7 +7,8 @@ import "styles/variables.scss";
 const InterviewerList = (props) => {
 
 
-    const interviewerItems = props.interviewers.map((interviewer) => (
+    const interviewerItems = Array.from(props.interviewers).map((interviewer) => (
+
         <InterviewerListItem
             key={interviewer.id}
             name={interviewer.name}

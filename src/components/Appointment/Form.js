@@ -4,7 +4,7 @@ import Button from 'components/Button'
 
 const Form = (props) => {
     const [student, setStudent] = useState(props.student || "");
-    const [interviewer, setInterviewer] = useState(props.interviewer || null);
+    const [interviewers, setInterviewers] = useState(props.interviewers || null);
     return (
         <main className="appointment__card appointment__card--create">
             <section className="appointment__card-left">
@@ -24,7 +24,7 @@ const Form = (props) => {
                     />
                 </form>
                 <InterviewerList
-                    interviewer={interviewer}
+                    interviewers={interviewers}
                 />
             </section>
             <section className="appointment__card-right">

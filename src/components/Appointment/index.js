@@ -62,9 +62,9 @@ const Appointment = (props) => {
         };
         transition(SAVING);
         bookInterview(id, interview)
+        console.log(id, interview)
             .then(() => transition(SHOW))
             .catch((err) => console.log(err))
-
 
     }
 
@@ -80,12 +80,15 @@ const Appointment = (props) => {
                 {mode === SHOW && (
                     <Show
                         student={interview.student}
-                        interviewer={[]}
+                        interviewer={interview.interviewer}
                     />
                 )}
 
                 {mode === CREATE && (
                     <Form
+                        interview={interview}
+
+                        interviewers={state.interviewers}
                         onSave={save}
                         bookInterview={bookInterview}
 

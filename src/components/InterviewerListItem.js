@@ -4,7 +4,7 @@ import './InterviewerListItem.scss'
 
 
 const InterviewerListItem = (props) => {
-
+    console.log("list", props)
     const interviewer = classNames('interviewers__item', {
         'interviewers__item--selected': props.selected,
     })
