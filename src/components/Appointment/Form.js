@@ -3,8 +3,9 @@ import InterviewerList from 'components/InterviewerList'
 import Button from 'components/Button'
 
 const Form = (props) => {
+    const { interview, interviewers } = props
     const [student, setStudent] = useState(props.student || "");
-    const [interviewers, setInterviewers] = useState(props.interviewers || null);
+    const [interviewerId, setInterviewerId] = useState(props.interviewer || null);
     return (
         <main className="appointment__card appointment__card--create">
             <section className="appointment__card-left">
@@ -13,6 +14,7 @@ const Form = (props) => {
                     <input
                         className="appointment__create-input text--semi-bold"
                         name="name"
+                        value={student}
                         type="text"
                         placeholder="Enter Student Name"
                         onChange={(e) =>
@@ -25,6 +27,8 @@ const Form = (props) => {
                 </form>
                 <InterviewerList
                     interviewers={interviewers}
+                    onChange={setInterviewerId}
+                    value={interviewerId}
                 />
             </section>
             <section className="appointment__card-right">
