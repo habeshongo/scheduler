@@ -8,14 +8,14 @@ import Confirm from './Confirm';
 import Error from './Error'
 import Status from './Status'
 import useVisualMode from 'hooks/useVisualMode'
-import Axios from 'axios'
 
 
 
 
+// 
 
 const Appointment = (props) => {
-    const { id, interview, interviewers, time, state, setState } = props
+    const { id, interview, interviewers, time, state, bookInterview, cancelInterview } = props
 
     const EMPTY = "EMPTY";
     const SHOW = "SHOW";
@@ -23,53 +23,13 @@ const Appointment = (props) => {
     const SAVING = "SAVING";
     const EDIT = "EDIT";
     const CONFIRM = "CONFIRM";
-
+    const DELETING = 'DELETING';
+    const ERROR_SAVE = 'ERROR_SAVE';
+    const ERROR_DELETE = 'ERROR_DELETE';
 
 
     const { mode, transition, back } = useVisualMode(props.interview ? SHOW : EMPTY);
 
-    function updateSpots(num) {
-        state.days.forEach((day) => {
-            if (day.name === state.day) {
-                day.spots -= num;
-            }
-        });
-        return state.days;
-    }
-
-    async function bookInterview(id, interview) {
-
-        const appointment = {
-            ...state.appointments[id],
-            interview: { ...interview }
-        };
-
-        const appointments = {
-            ...state.appointments,
-            [id]: appointment
-        };
-
-
-        /*--------*/
-        // Make the PUT request to update the database
-        return Axios
-            .put(`http://localhost:8001/api/appointments/${id}`, appointment)
-            .then(() => {
-                if (!state.appointments[id].interview) {
-                    const days = updateSpots(1)
-                    setState({
-                        ...state,
-                        appointments,
-                        days,
-                    })
-                } else {
-                    setState({
-                        ...state,
-                        appointments
-                    })
-                }
-            })
-    }
 
 
     function save(name, interviewer) {
@@ -80,8 +40,15 @@ const Appointment = (props) => {
         transition(SAVING);
         bookInterview(id, interview)
             .then(() => transition(SHOW))
-            .catch((err) => console.log(err))
+            .catch((error) => transition(ERROR_SAVE, true));
 
+    }
+
+    function destroy() {
+        transition(DELETING, true);
+        cancelInterview(id)
+            .then(() => transition(EMPTY))
+            .catch((error) => transition(ERROR_DELETE, true));
     }
 
     return (
@@ -95,7 +62,7 @@ const Appointment = (props) => {
                         interviewer={interview.interviewer}
                         onEdit={() => transition(EDIT)}
                         onDelete={() => transition(CONFIRM)}
-                        onCancle={back}
+                        onCancel={back}
                     />
                 )}
 
@@ -108,7 +75,39 @@ const Appointment = (props) => {
                         onCancel={back}
                         bookInterview={bookInterview}
 
+                    />
+                )}
 
+                {mode === SAVING && <Status message="Saving" />}
+
+                {mode === EDIT && (
+                    <Form
+                        student={interview.student}
+                        interviewer={interview.interviewer.id}
+                        interviewers={interviewers}
+                        onSave={save}
+                        onCancel={back}
+                    />
+                )}
+
+                {mode === CONFIRM && (
+                    <Confirm
+                        message="Would u like to delete?"
+                        onCancel={back}
+                        onConfirm={destroy}
+                    />
+                )}
+
+                {mode === DELETING && <Status message="Deleting" />}
+
+                {mode === ERROR_SAVE && (
+                    <Error message="Could not save appointment" onClose={() => back()} />
+                )}
+
+                {mode === ERROR_DELETE && (
+                    <Error
+                        message="Could not delete appointment"
+                        onClose={() => back()}
                     />
                 )}
 
