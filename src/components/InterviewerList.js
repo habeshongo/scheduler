@@ -1,7 +1,7 @@
 import React from 'react'
 import InterviewerListItem from './InterviewerListItem';
 import "styles/variables.scss";
-
+import PropTypes from 'prop-types';
 
 
 const InterviewerList = (props) => {
@@ -29,4 +29,5 @@ const InterviewerList = (props) => {
 }
 
 
+InterviewerList.propTypes = { interviewers: PropTypes.array.isRequired };
 export default InterviewerList;

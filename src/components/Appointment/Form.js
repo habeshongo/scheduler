@@ -3,31 +3,32 @@ import InterviewerList from 'components/InterviewerList'
 import Button from 'components/Button'
 
 const Form = (props) => {
-    const { interview, interviewers, onSave, onCancel } = props
+    const { interview, interviewers, onSave, onCancel
+    } = props
     const [student, setStudent] = useState(props.student || "");
-    const [interviewerId, setInterviewerId] = useState(props.interviewer || null);
-
+    const [interviewer, setInterviewer] = useState(props.interviewer || null);
     const [error, setError] = useState("")
 
     function reset() {
         setStudent("")
-        setInterviewerId(null)
-        setError(null)
+        setInterviewer(null)
+        setError("")
     }
 
-    function saveForm() {
+
+    function validate() {
         if (student === "") {
-            setError('Please enter student name');
-            console.log(error)
+            setError("Student name cannot be blank");
             return;
         }
-        if (!interviewerId) {
-            setError('Please select the interviewer');
-            console.log(error)
+
+        if (interviewer === null) {
+            setError("Please select an interviewer");
             return;
         }
-        setError("")
-        onSave(student, interviewerId)
+
+        setError("");
+        props.onSave(student, interviewer);
     }
 
     function cancel() {
@@ -47,22 +48,20 @@ const Form = (props) => {
                         placeholder="Enter Student Name"
                         onChange={(e) =>
                             setStudent(e.target.value)}
-                    /*
-                      This must be a controlled component
-                      your code goes here
-                    */
+                        data-testid="student-name-input"
                     />
                 </form>
+                <section className="appointment__validation">{error}</section>
                 <InterviewerList
                     interviewers={interviewers}
-                    onChange={setInterviewerId}
-                    value={interviewerId}
+                    onChange={setInterviewer}
+                    value={interviewer}
                 />
             </section>
             <section className="appointment__card-right">
                 <section className="appointment__actions">
                     <Button danger onClick={cancel}>Cancel</Button>
-                    <Button confirm onClick={saveForm}>Save</Button>
+                    <Button confirm onClick={validate}>Save</Button>
                 </section>
             </section>
         </main>
