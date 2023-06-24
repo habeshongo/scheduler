@@ -1,6 +1,9 @@
 # Interview Scheduler
+Interview Scheduler is an app developed by students as part of a React Learning project for LightHouse Labs Web Development Bootcamp.
+The app allows students to book, edit, and delte an appointment with an interviewer.
 
 ## Setup
+The project template can be copied from: https://github.com/lighthouse-labs/scheduler/.
 
 Install dependencies with `npm install`.
 
@@ -21,3 +24,8 @@ npm test
 ```sh
 npm run storybook
 ```
+
+## Screenshots
+!(https://github.com/habeshongo/scheduler/blob/master/screenshots/Screenshot%202023-06-24%20173718.png)
+
+!(https://github.com/habeshongo/scheduler/blob/master/screenshots/Screenshot%202023-06-24%20173759.png)
