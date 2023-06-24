@@ -1,6 +1,6 @@
 # Interview Scheduler
 Interview Scheduler is an app developed by students as part of a React Learning project for LightHouse Labs Web Development Bootcamp.
-The app allows students to book, edit, and delte an appointment with an interviewer.
+The app allows students to book, edit, and delete an appointment with an interviewer.
 
 ## Setup
 The project template can be copied from: https://github.com/lighthouse-labs/scheduler/.
