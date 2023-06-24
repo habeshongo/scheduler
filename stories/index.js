@@ -4,6 +4,7 @@ import { action } from "@storybook/addon-actions";
 import "index.scss";
 import Button from "components/Button";
 import DayList from '../src/components/DayList';
+import DayListItem from "components/DayListItem";
 import InterviewerListItem from "../src/components/InterviewerListItem";
 import InterviewerList from "../src/components/InterviewerList";
 import Appointment from "components/Appointment/index.js";
@@ -15,6 +16,8 @@ import Status from "components/Appointment/Status";
 import Error from "components/Appointment/Error";
 import Create from "components/Appointment/Create";
 import Edit from "components/Appointment/Edit";
+import Form from "components/Appointment/Form";
+//import { Fragment } from 'react';
 
 
 
@@ -152,7 +155,7 @@ storiesOf("Appointment", module)
     onCancel={action("onCancel")}
   />)
   .add("Status", () => <Status
-    message="Deleting"
+    message="DELETING"
   />)
   .add("Error", () => <Error
     message="Could not delete appointment"

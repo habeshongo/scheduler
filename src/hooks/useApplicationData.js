@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
-import Axios from 'axios';
+import { useState, useEffect } from "react";
+import Axios from "axios";
 import "components/Application.scss";
-
 
 export default function useApplicationData(props) {
     const [state, setState] = useState({
@@ -11,7 +10,7 @@ export default function useApplicationData(props) {
         interviewers: {},
     });
 
-    const setDay = day => setState({ ...state, day });
+    const setDay = (day) => setState({ ...state, day });
 
     useEffect(() => {
         Promise.all([
@@ -20,62 +19,54 @@ export default function useApplicationData(props) {
             // axios.get('http://localhost:8001/api/interviewers')
             Axios.get("/api/days"),
             Axios.get("/api/appointments"),
-            Axios.get("/api/interviewers")
-        ]).then((all) => {
-            setState(prev => ({
-                ...prev,
-                days: all[0].data,
-                appointments: all[1].data,
-                interviewers: all[2].data
-            }));
-        }).catch((err) => console.log('error: ', err));
+            Axios.get("/api/interviewers"),
+        ])
+            .then((all) => {
+                setState((prev) => ({
+                    ...prev,
+                    days: all[0].data,
+                    appointments: all[1].data,
+                    interviewers: all[2].data,
+                }));
+            })
+            .catch((err) => console.log("error: ", err));
+    }, []);
 
-    }, [])
-
-    function updateSpots(num) {
-        state.days.forEach((day) => {
-            if (day.name === state.day) {
-                day.spots -= num;
-            }
-        });
-        return state.days;
+    function updateSpots(appointments, appointmentId) {
+        const foundDay = state.days.find((d) =>
+            d.appointments.includes(appointmentId)
+        );
+        const spots = foundDay.appointments.filter(
+            (id) => appointments[id].interview === null
+        ).length;
+        return state.days.map((d) =>
+            d.appointments.includes(appointmentId) ? { ...d, spots } : d
+        );
     }
 
-
     async function bookInterview(id, interview) {
-
         const appointment = {
             ...state.appointments[id],
-            interview: { ...interview }
+            interview: { ...interview },
         };
 
         const appointments = {
             ...state.appointments,
-            [id]: appointment
+            [id]: appointment,
         };
 
         /*--------*/
 
-
-
         // Make the PUT request to update the database
-        return Axios
-            .put(`http://localhost:8001/api/appointments/${id}`, appointment)
-            .then(() => {
-                if (!state.appointments[id].interview) {
-                    const updatedDays = updateSpots(appointment.interview ? 0 : 1);
-                    setState({
-                        ...state,
-                        appointments,
-                        updatedDays,
-                    })
-                } else {
-                    setState({
-                        ...state,
-                        appointments
-                    })
-                }
-            })
+        return Axios.put(`http://localhost:8001/api/appointments/${id}`, {
+            interview,
+        }).then(() => {
+            setState({
+                ...state,
+                appointments,
+                days: updateSpots(appointments, id),
+            });
+        });
     }
 
     async function cancelInterview(id) {
@@ -89,18 +80,16 @@ export default function useApplicationData(props) {
             [id]: appointment,
         };
 
-        return Axios
-            .delete(`http://localhost:8001/api/appointments/${id}`, appointment)
-            .then(() => {
-                const updatedDays = updateSpots(appointment.interview ? 0 : 1);
-                setState({ ...state, appointments, updatedDays });
-            });
+        return Axios.delete(`http://localhost:8001/api/appointments/${id}`).then(
+            () => {
+                setState({
+                    ...state,
+                    appointments,
+                    days: updateSpots(appointments, id),
+                });
+            }
+        );
     }
 
-
-
-
-
     return { state, setDay, bookInterview, cancelInterview };
-
 }
