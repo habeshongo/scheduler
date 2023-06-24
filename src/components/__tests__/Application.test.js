@@ -26,7 +26,7 @@ describe("Application", () => {
   });
 
 
-  xit("loads data, books an interview and reduces the spots remaining for Monday by 1", async () => {
+  it("loads data, books an interview and reduces the spots remaining for Monday by 1", async () => {
     const { container } = render(<Application />);
 
     await waitForElement(() => getByText(container, "Archie Cohen"));
@@ -58,7 +58,7 @@ describe("Application", () => {
 
 
 
-  xit("loads data, cancels an interview and increases the spots remaining for Monday by 1", async () => {
+  it("loads data, cancels an interview and increases the spots remaining for Monday by 1", async () => {
     // 1. Render the Application.
     const { container, debug } = render(<Application />);
 
@@ -78,8 +78,10 @@ describe("Application", () => {
     // 5. Click the "Confirm" button on the confirmation.
     fireEvent.click(getByText(appointment, "Confirm"));
 
+
+
     // 6. Check that the element with the text "Deleting" is displayed.
-    expect(getByText(appointment, "DELETING")).toBeInTheDocument();
+    expect(getByText(appointment, "Deleting")).toBeInTheDocument();
 
     // 7. Wait until the element with the "Add" button is displayed.
     await waitForElement(() => getByAltText(appointment, "Add"));
@@ -95,7 +97,7 @@ describe("Application", () => {
 
 
 
-  xit("loads data, edits an interview and keeps the spots remaining for Monday the same", async () => {
+  it("loads data, edits an interview and keeps the spots remaining for Monday the same", async () => {
     // 1. Render the Application.
     const { container, debug } = render(<Application />);
 
@@ -185,7 +187,7 @@ describe("Application", () => {
 
     fireEvent.click(getByText(appointment, "Confirm"));
 
-    expect(getByText(appointment, "DELETING")).toBeInTheDocument();
+    expect(getByText(appointment, "Deleting")).toBeInTheDocument();
 
 
     await waitForElement(() => getByText(appointment, "Could not perform function"));
