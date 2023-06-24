@@ -26,6 +26,6 @@ npm run storybook
 ```
 
 ## Screenshots
-!(https://github.com/habeshongo/scheduler/blob/master/screenshots/Screenshot%202023-06-24%20173718.png)
+!["Homepage"](https://github.com/habeshongo/scheduler/blob/master/screenshots/Screenshot%202023-06-24%20173718.png)
 
-!(https://github.com/habeshongo/scheduler/blob/master/screenshots/Screenshot%202023-06-24%20173759.png)
+!["Adding an interview"](https://github.com/habeshongo/scheduler/blob/master/screenshots/Screenshot%202023-06-24%20173759.png)
